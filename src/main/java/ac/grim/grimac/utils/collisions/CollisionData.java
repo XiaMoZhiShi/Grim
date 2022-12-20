@@ -177,6 +177,8 @@ public enum CollisionData {
             StateTypes.CREEPER_HEAD, StateTypes.ZOMBIE_HEAD, StateTypes.DRAGON_HEAD, StateTypes.PLAYER_HEAD,
             StateTypes.SKELETON_SKULL, StateTypes.WITHER_SKELETON_SKULL),
 
+    PIGLIN_HEAD(new SimpleCollisionBox(0.1875F, 0, 0.1875F, 0.8125F, 0.5F, 0.8125F, false), StateTypes.PIGLIN_HEAD),
+
     // Overwrite previous SKULL enum for legacy, where head and wall skull isn't separate
     WALL_SKULL((player, version, data, x, y, z) -> {
         switch (data.getFacing()) {
