@@ -580,6 +580,20 @@ public enum CollisionData {
 
     }, BlockTags.FENCE_GATES.getStates().toArray(new StateType[0])),
 
+    WALL_HANGING_SIGN((player, verison, data, x, y, z) ->
+    {
+        switch (data.getFacing()) {
+            case NORTH:
+            case SOUTH:
+                return new SimpleCollisionBox(0.0F, 0.875F, 0.375F, 1.0F, 1F, 0.625F, false);
+            case WEST:
+            case EAST:
+                return new SimpleCollisionBox(0.375F, 0.875F, 0.0F, 0.625F, 1F, 1.0F, false);
+            default:
+                return NoCollisionBox.INSTANCE;
+        }
+    }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
+
     FENCE(new DynamicFence(), BlockTags.FENCES.getStates().toArray(new StateType[0])),
 
     PANE(new DynamicPane(), Materials.getPanes().toArray(new StateType[0])),

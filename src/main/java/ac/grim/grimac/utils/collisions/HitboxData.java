@@ -138,6 +138,16 @@ public enum HitboxData {
         return new SimpleCollisionBox(0, 0, 0, 1, data.getLayers() * 0.125, 1);
     }, StateTypes.SNOW),
 
+    HANGING_SIGN((player, item, verison, data, x, y, z) ->
+    {
+        boolean isXAxis = data.getFacing() == BlockFace.WEST || data.getFacing() == BlockFace.EAST;
+
+        return isXAxis
+                ? new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D)
+                : new HexCollisionBox(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
+
+    }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
+
     LECTERN_BLOCK((player, item, version, data, x, y, z) -> {
         ComplexCollisionBox common = new ComplexCollisionBox(new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
                 new HexCollisionBox(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12.0D));
