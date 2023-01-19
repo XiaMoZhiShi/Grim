@@ -86,6 +86,7 @@ public class PacketSetWrapperNull extends PacketListenerAbstract {
                         //modify & create a new packet from pre-existing one if they are a spectator
                         if (entry.getGameMode() == GameMode.SPECTATOR) {
                             modifiedPacket = new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(
+                                    entry.getGameProfile().getUUID(),
                                     entry.getGameProfile(),
                                     entry.isListed(),
                                     entry.getLatency(),
