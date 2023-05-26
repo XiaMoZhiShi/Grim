@@ -45,7 +45,9 @@ public class PacketPlayerJoinQuit extends PacketListenerAbstract {
     @Override
     public void onUserDisconnect(UserDisconnectEvent event) {
         GrimAPI.INSTANCE.getPlayerDataManager().remove(event.getUser());
+        GrimAPI.INSTANCE.getPlayerDataManager().exemptUsers.remove(event.getUser());
         //Check if calling async is safe
+        if (event.getUser().getProfile().getUUID() == null) return; // folia doesn't like null getPlayer()
         Player player = Bukkit.getPlayer(event.getUser().getProfile().getUUID());
         if (player != null) {
             GrimAPI.INSTANCE.getAlertManager().handlePlayerQuit(player);

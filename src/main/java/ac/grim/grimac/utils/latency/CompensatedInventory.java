@@ -201,33 +201,37 @@ public class CompensatedInventory extends Check implements PacketCheck {
 
             EquipmentType equipmentType = EquipmentType.getEquipmentSlotForItem(use);
             if (equipmentType != null) {
-                ItemStack itemstack1 = getByEquipmentType(equipmentType);
-                if (itemstack1.isEmpty()) {
-
-                    int slot;
-                    switch (equipmentType) {
-                        case HEAD:
-                            slot = Inventory.SLOT_HELMET;
-                            break;
-                        case CHEST:
-                            slot = Inventory.SLOT_CHESTPLATE;
-                            break;
-                        case LEGS:
-                            slot = Inventory.SLOT_LEGGINGS;
-                            break;
-                        case FEET:
-                            slot = Inventory.SLOT_BOOTS;
-                            break;
-                        default: // Not armor, therefore we shouldn't run this code
-                            return;
-                    }
-
-                    inventory.getInventoryStorage().handleClientClaimedSlotSet(slot);
-                    inventory.getInventoryStorage().setItem(slot, use);
-
-                    inventory.getInventoryStorage().handleServerCorrectSlot(inventory.selected);
-                    use.setAmount(0);
+                int slot;
+                switch (equipmentType) {
+                    case HEAD:
+                        slot = Inventory.SLOT_HELMET;
+                        break;
+                    case CHEST:
+                        slot = Inventory.SLOT_CHESTPLATE;
+                        break;
+                    case LEGS:
+                        slot = Inventory.SLOT_LEGGINGS;
+                        break;
+                    case FEET:
+                        slot = Inventory.SLOT_BOOTS;
+                        break;
+                    default: // Not armor, therefore we shouldn't run this code
+                        return;
                 }
+
+                ItemStack itemstack1 = getByEquipmentType(equipmentType);
+                // Only 1.19.4+ clients support swapping with non-empty items
+                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_19_4) && !itemstack1.isEmpty()) return;
+
+                // 1.19.4+ clients support swapping with non-empty items
+                int swapItemSlot = item.getHand() == InteractionHand.MAIN_HAND ? inventory.selected + Inventory.HOTBAR_OFFSET : Inventory.SLOT_OFFHAND;
+
+                // Mojang implemented this stupidly, I rewrote their item swap code to make it somewhat cleaner.
+                inventory.getInventoryStorage().handleClientClaimedSlotSet(swapItemSlot);
+                inventory.getInventoryStorage().setItem(swapItemSlot, itemstack1);
+
+                inventory.getInventoryStorage().handleClientClaimedSlotSet(slot);
+                inventory.getInventoryStorage().setItem(slot, use);
             }
         }
 
@@ -267,8 +271,13 @@ public class CompensatedInventory extends Check implements PacketCheck {
         if (event.getPacketType() == PacketType.Play.Client.CREATIVE_INVENTORY_ACTION) {
             WrapperPlayClientCreativeInventoryAction action = new WrapperPlayClientCreativeInventoryAction(event);
             if (player.gamemode != GameMode.CREATIVE) return;
-            if (action.getSlot() >= 1 && action.getSlot() <= 45) {
-                player.getInventory().menu.getSlot(action.getSlot()).set(action.getItemStack());
+
+            boolean valid = action.getSlot() >= 1 &&
+                    (PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_8) ?
+                    action.getSlot() <= 45 : action.getSlot() < 45);
+
+            if (valid) {
+                player.getInventory().inventory.getSlot(action.getSlot()).set(action.getItemStack());
                 inventory.getInventoryStorage().handleClientClaimedSlotSet(action.getSlot());
             }
         }
@@ -448,7 +457,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
                         inventory.getInventoryStorage().setItem(slot.getSlot(), slot.getItem());
                     }
                 } else if (slot.getWindowId() == 0) { // Player hotbar (ONLY!)
-                    if (slot.getSlot() >= 36 && slot.getSlot() <= 44) {
+                    if (slot.getSlot() >= 36 && slot.getSlot() <= 45) {
                         inventory.getSlot(slot.getSlot()).set(slot.getItem());
                     }
                 } else if (slot.getWindowId() == openWindowID) { // Opened inventory (if not valid, client crashes)
