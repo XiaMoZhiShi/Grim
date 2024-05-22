@@ -50,7 +50,7 @@ public class CheckManager {
     ClassToInstanceMap<VehicleCheck> vehicleCheck;
     ClassToInstanceMap<PacketCheck> prePredictionChecks;
 
-    ClassToInstanceMap<BlockPlaceCheck> blockPlaceCheck;
+    //ClassToInstanceMap<BlockPlaceCheck> blockPlaceCheck;
     ClassToInstanceMap<PostPredictionCheck> postPredictionCheck;
 
     public ClassToInstanceMap<AbstractCheck> allChecks;
@@ -130,6 +130,7 @@ public class CheckManager {
                 .put(LastInstanceManager.class, player.lastInstanceManager)
                 .build();
 
+        /*
         blockPlaceCheck = new ImmutableClassToInstanceMap.Builder<BlockPlaceCheck>()
                 .put(InvalidPlace.class, new InvalidPlace(player))
                 .put(AirLiquidPlace.class, new AirLiquidPlace(player))
@@ -140,6 +141,7 @@ public class CheckManager {
                 .put(DuplicateRotPlace.class, new DuplicateRotPlace(player))
                 .put(GhostBlockMitigation.class, new GhostBlockMitigation(player))
                 .build();
+        */
 
         prePredictionChecks = new ImmutableClassToInstanceMap.Builder<PacketCheck>()
                 .put(TimerCheck.class, new TimerCheck(player))
@@ -162,7 +164,7 @@ public class CheckManager {
                 .putAll(rotationCheck)
                 .putAll(vehicleCheck)
                 .putAll(postPredictionCheck)
-                .putAll(blockPlaceCheck)
+                //.putAll(blockPlaceCheck)
                 .putAll(prePredictionChecks)
                 .build();
     }
@@ -219,9 +221,9 @@ public class CheckManager {
         for (RotationCheck check : rotationCheck.values()) {
             check.process(rotation);
         }
-        for (BlockPlaceCheck check : blockPlaceCheck.values()) {
-            check.process(rotation);
-        }
+        //for (BlockPlaceCheck check : blockPlaceCheck.values()) {
+        //    check.process(rotation);
+        //}
     }
 
     public void onVehiclePositionUpdate(final VehiclePositionUpdate update) {
@@ -237,15 +239,15 @@ public class CheckManager {
     }
 
     public void onBlockPlace(final BlockPlace place) {
-        for (BlockPlaceCheck check : blockPlaceCheck.values()) {
-            check.onBlockPlace(place);
-        }
+        //for (BlockPlaceCheck check : blockPlaceCheck.values()) {
+        //    check.onBlockPlace(place);
+        //}
     }
 
     public void onPostFlyingBlockPlace(final BlockPlace place) {
-        for (BlockPlaceCheck check : blockPlaceCheck.values()) {
-            check.onPostFlyingBlockPlace(place);
-        }
+        //for (BlockPlaceCheck check : blockPlaceCheck.values()) {
+         //   check.onPostFlyingBlockPlace(place);
+        //}
     }
 
     public ExplosionHandler getExplosionHandler() {
