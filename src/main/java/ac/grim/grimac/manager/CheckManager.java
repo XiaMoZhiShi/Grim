@@ -72,7 +72,7 @@ public class CheckManager {
                 .put(BadPacketsB.class, new BadPacketsB(player))
                 .put(BadPacketsC.class, new BadPacketsC(player))
                 .put(BadPacketsD.class, new BadPacketsD(player))
-                .put(BadPacketsE.class, new BadPacketsE(player))
+                //.put(BadPacketsE.class, new BadPacketsE(player))
                 .put(BadPacketsF.class, new BadPacketsF(player))
                 .put(BadPacketsG.class, new BadPacketsG(player))
                 .put(BadPacketsH.class, new BadPacketsH(player))
@@ -81,7 +81,7 @@ public class CheckManager {
                 .put(BadPacketsK.class, new BadPacketsK(player))
                 .put(BadPacketsL.class, new BadPacketsL(player))
                 .put(BadPacketsM.class, new BadPacketsM(player))
-                .put(BadPacketsN.class, new BadPacketsN(player))
+                //.put(BadPacketsN.class, new BadPacketsN(player))
                 .put(BadPacketsP.class, new BadPacketsP(player))
                 .put(BadPacketsQ.class, new BadPacketsQ(player))
                 .put(BadPacketsR.class, new BadPacketsR(player))
@@ -144,7 +144,7 @@ public class CheckManager {
         */
 
         prePredictionChecks = new ImmutableClassToInstanceMap.Builder<PacketCheck>()
-                .put(TimerCheck.class, new TimerCheck(player))
+                //.put(TimerCheck.class, new TimerCheck(player))
                 .put(CrashA.class, new CrashA(player))
                 .put(CrashB.class, new CrashB(player))
                 .put(CrashC.class, new CrashC(player))

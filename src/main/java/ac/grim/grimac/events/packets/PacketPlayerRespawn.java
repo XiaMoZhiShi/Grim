@@ -107,7 +107,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 player.filterMojangStupidityOnMojangStupidity = new Vector3d();
                 player.lastSprintingForSpeed = false; // This is reverted even on 1.18 clients
 
-                player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
+                //XiamoMC: Disabled BacPacketsE, so don't handle
+                //player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
 
                 // compensate for immediate respawn gamerule
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15)) {
