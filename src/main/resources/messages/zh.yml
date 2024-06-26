@@ -1,3 +1,5 @@
+# 您也可以使用十六进制代码，格式为 #FFFFFF 或 #ffffff。
+
 # \u00BB is » (double >>), ANSI and UTF-8 interpret this differently... you may even see ? due to this
 prefix: "&bGrim &8\u00BB"
 
@@ -45,6 +47,6 @@ help:
   - "/grim perf &f- &7开发者毫秒预测"
   - "/grim reload &f- &7重新加载配置"
   - "/grim spectate <player> &f- &7观看玩家"
-  - "/grim verbose &f- &f显示无缓冲区的每个拉回"
+  - "/grim verbose &f- &7显示无缓冲区的每个拉回"
   - "/grim log [1-999] &f- &7预测标志的调试日志"
   - "&7======================"

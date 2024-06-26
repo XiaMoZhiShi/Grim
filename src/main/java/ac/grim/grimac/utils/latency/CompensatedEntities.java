@@ -4,6 +4,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.data.ShulkerData;
 import ac.grim.grimac.utils.data.TrackerData;
 import ac.grim.grimac.utils.data.packetentity.*;
+import ac.grim.grimac.utils.data.packetentity.dragon.PacketEntityEnderDragon;
 import ac.grim.grimac.utils.math.GrimMath;
 import ac.grim.grimac.utils.nmsutil.BoundingBoxSize;
 import ac.grim.grimac.utils.nmsutil.WatchableIndexUtil;
@@ -62,6 +63,13 @@ public class CompensatedEntities {
     public void removeEntity(int entityID) {
         PacketEntity entity = entityMap.remove(entityID);
         if (entity == null) return;
+
+        if (entity instanceof PacketEntityEnderDragon) {
+            PacketEntityEnderDragon dragon = (PacketEntityEnderDragon) entity;
+            for (int i = 1; i < dragon.getParts().size() + 1; i++) {
+                entityMap.remove(entityID + i);
+            }
+        }
 
         for (PacketEntity passenger : new ArrayList<>(entity.passengers)) {
             passenger.eject();
@@ -122,6 +130,7 @@ public class CompensatedEntities {
                 switch (key) {
                     case "minecraft:player.block_break_speed":
                         player.compensatedEntities.getSelf().setBreakSpeedMultiplier(GrimMath.clamp(snapshotWrapper.getValue(), 0, 1024));
+                        break;
                     case "minecraft:player.block_interaction_range":
                         player.compensatedEntities.getSelf().setBlockInteractRange(GrimMath.clamp(snapshotWrapper.getValue(), 0, 64));
                         break;
@@ -236,6 +245,8 @@ public class CompensatedEntities {
                 packetEntity = new PacketEntityTrackXRot(player, entityType, position.getX(), position.getY(), position.getZ(), xRot);
             } else if (EntityTypes.FISHING_BOBBER.equals(entityType)) {
                 packetEntity = new PacketEntityHook(player, entityType, position.getX(), position.getY(), position.getZ(), data);
+            } else if (EntityTypes.ENDER_DRAGON.equals(entityType)) {
+                packetEntity = new PacketEntityEnderDragon(player, entityID, position.getX(), position.getY(), position.getZ());
             } else {
                 packetEntity = new PacketEntity(player, entityType, position.getX(), position.getY(), position.getZ());
             }
@@ -361,7 +372,7 @@ public class CompensatedEntities {
         if (entity instanceof PacketEntityRideable) {
             int offset = 0;
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-                if (entity.type == EntityTypes.PIG) {
+                if (entity.getType() == EntityTypes.PIG) {
                     EntityData pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 16);
                     if (pigSaddle != null) {
                         ((PacketEntityRideable) entity).hasSaddle = ((byte) pigSaddle.getValue()) != 0;
@@ -377,7 +388,7 @@ public class CompensatedEntities {
                 offset = 1;
             }
 
-            if (entity.type == EntityTypes.PIG) {
+            if (entity.getType() == EntityTypes.PIG) {
                 EntityData pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
                 if (pigSaddle != null) {
                     ((PacketEntityRideable) entity).hasSaddle = (boolean) pigSaddle.getValue();
@@ -463,7 +474,7 @@ public class CompensatedEntities {
             }
         }
 
-        if (entity.type == EntityTypes.FIREWORK_ROCKET) {
+        if (entity.getType() == EntityTypes.FIREWORK_ROCKET) {
             int offset = 0;
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2)) {
                 offset = 2;
