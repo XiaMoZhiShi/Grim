@@ -128,7 +128,7 @@ publishing.publications.create<MavenPublication>("maven") {
 
 tasks.shadowJar {
     minimize()
-    archiveFileName.set("${project.name}-${project.version}.jar")
+    archiveFileName.set("${project.name}-xiamo-${project.version}.jar")
     relocate("io.github.retrooper.packetevents", "ac.grim.grimac.shaded.io.github.retrooper.packetevents")
     relocate("com.github.retrooper.packetevents", "ac.grim.grimac.shaded.com.github.retrooper.packetevents")
     relocate("co.aikar.commands", "ac.grim.grimac.shaded.acf")
