@@ -69,6 +69,12 @@ public class PostCheck extends Check implements PacketCheck, PostPredictionCheck
 
     @Override
     public void onPacketReceive(final PacketReceiveEvent event) {
+
+        //Xiamo: Ignore Block placement
+        if (PLAYER_BLOCK_PLACEMENT.equals(event.getPacketType())) {
+            return;
+        }
+
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             // Don't count teleports or duplicates as movements
             if (player.packetStateData.lastPacketWasTeleport || player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {

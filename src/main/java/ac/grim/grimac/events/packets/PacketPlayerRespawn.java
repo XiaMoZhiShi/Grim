@@ -148,8 +148,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                     player.lastSprintingForSpeed = false;
                 }
 
-                //XiamoMC: Disabled BacPacketsE, so don't handle
-                //player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
+                player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
 
                 // compensate for immediate respawn gamerule
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15)) {

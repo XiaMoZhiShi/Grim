@@ -301,9 +301,6 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
             } else if (player.lastTransactionReceived.get() > teleportPos.getTransaction()) {
                 // The player ignored the teleport (and this teleport matters), resynchronize
 
-                //XiamoMC: Ignore BadPacketsN
-                /*
-
                 player.checkManager.getPacketCheck(BadPacketsN.class).flagAndAlert();
                 pendingTeleports.poll();
                 requiredSetBack.setPlugin(false);
@@ -311,7 +308,6 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
                     sendSetback(requiredSetBack);
                 }
 
-                 */
                 continue;
             }
             // No farther setbacks before the player's transactoin
