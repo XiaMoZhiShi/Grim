@@ -2,7 +2,9 @@ package ac.grim.grimac.utils.nmsutil;
 
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.enums.FluidTag;
+import ac.grim.grimac.utils.inventory.EnchantmentHelper;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -115,7 +117,7 @@ public class BlockBreakSpeed {
             isCorrectToolForDrop = block.getType() == StateTypes.COBWEB;
         }
 
-        speedMultiplier *= (float) player.compensatedEntities.getSelf().getBreakSpeedMultiplier();
+        speedMultiplier *= (float) player.compensatedEntities.getSelf().getAttribute(Attributes.PLAYER_BLOCK_BREAK_SPEED).get();
 
         if (speedMultiplier > 1.0f) {
             int digSpeed = tool.getEnchantmentLevel(EnchantmentTypes.BLOCK_EFFICIENCY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
@@ -151,15 +153,7 @@ public class BlockBreakSpeed {
         }
 
         if (player.fluidOnEyes == FluidTag.WATER) {
-            ItemStack helmet = player.getInventory().getHelmet();
-            ItemStack chestplate = player.getInventory().getChestplate();
-            ItemStack leggings = player.getInventory().getLeggings();
-            ItemStack boots = player.getInventory().getBoots();
-
-            if ((helmet == null || helmet.getEnchantmentLevel(EnchantmentTypes.AQUA_AFFINITY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0) &&
-                    (chestplate == null || chestplate.getEnchantmentLevel(EnchantmentTypes.AQUA_AFFINITY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0) &&
-                    (leggings == null || leggings.getEnchantmentLevel(EnchantmentTypes.AQUA_AFFINITY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0) &&
-                    (boots == null || boots.getEnchantmentLevel(EnchantmentTypes.AQUA_AFFINITY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0)) {
+            if (EnchantmentHelper.getMaximumEnchantLevel(player.getInventory(), EnchantmentTypes.AQUA_AFFINITY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0) {
                 speedMultiplier /= 5;
             }
         }
