@@ -3,7 +3,6 @@ package ac.grim.grimac.predictionengine.movementtick;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityHorse;
 import ac.grim.grimac.utils.nmsutil.Collisions;
-import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import org.bukkit.util.Vector;
 
@@ -16,7 +15,7 @@ public class MovementTickerHorse extends MovementTickerLivingVehicle {
 
         if (!horsePacket.hasSaddle) return;
 
-        player.speed = horsePacket.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).get();
+        player.speed = horsePacket.movementSpeedAttribute;
 
         // Setup player inputs
         float horizInput = player.vehicleData.vehicleHorizontal * 0.5F;

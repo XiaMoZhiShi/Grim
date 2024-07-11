@@ -19,10 +19,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.grim.grimac.utils.data.ReachInterpolationData;
 import ac.grim.grimac.utils.data.TrackedPosition;
-import ac.grim.grimac.utils.data.attribute.ValuedAttribute;
 import ac.grim.grimac.utils.nmsutil.GetBoundingBox;
-import com.github.retrooper.packetevents.protocol.attribute.Attribute;
-import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.potion.PotionType;
@@ -31,7 +28,6 @@ import com.github.retrooper.packetevents.util.Vector3d;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // You may not copy this check unless your anticheat is licensed under GPL
 public class PacketEntity extends TypedPacketEntity {
@@ -47,17 +43,17 @@ public class PacketEntity extends TypedPacketEntity {
     private ReachInterpolationData newPacketLocation;
 
     public HashMap<PotionType, Integer> potionsMap = null;
-    protected Map<Attribute, ValuedAttribute> attributeMap = new HashMap<>();
+    public float scale = 1f; // 1.20.5+
+    public float stepHeight = 0.6f; // 1.20.5+
+    public double gravityAttribute = 0.08; // 1.20.5+
 
     public PacketEntity(EntityType type) {
         super(type);
-        initAttributes();
         this.trackedServerPosition = new TrackedPosition();
     }
 
     public PacketEntity(GrimPlayer player, EntityType type, double x, double y, double z) {
         super(type);
-        initAttributes();
         this.trackedServerPosition = new TrackedPosition();
         this.trackedServerPosition.setPos(new Vector3d(x, y, z));
         if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) { // Thanks ViaVersion
@@ -65,20 +61,6 @@ public class PacketEntity extends TypedPacketEntity {
         }
         final Vector3d pos = trackedServerPosition.getPos();
         this.newPacketLocation = new ReachInterpolationData(player, GetBoundingBox.getPacketEntityBoundingBox(player, pos.x, pos.y, pos.z, this), trackedServerPosition, this);
-    }
-
-    private void initAttributes() {
-        attributeMap.put(Attributes.GENERIC_SCALE, ValuedAttribute.ranged(Attributes.GENERIC_SCALE, 1.0, 0.0625, 16));
-        attributeMap.put(Attributes.GENERIC_STEP_HEIGHT, ValuedAttribute.ranged(Attributes.GENERIC_STEP_HEIGHT, 0.6f, 0, 10));
-        attributeMap.put(Attributes.GENERIC_GRAVITY, ValuedAttribute.ranged(Attributes.GENERIC_GRAVITY, 0.08, -1, 1));
-    }
-
-    public ValuedAttribute getAttribute(Attribute attribute) {
-        return attributeMap.get(attribute);
-    }
-
-    public void resetAttributes() {
-        attributeMap.values().forEach(ValuedAttribute::reset);
     }
 
     // Set the old packet location to the new one
