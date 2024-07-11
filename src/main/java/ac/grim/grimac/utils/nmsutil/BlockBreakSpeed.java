@@ -3,6 +3,7 @@ package ac.grim.grimac.utils.nmsutil;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.enums.FluidTag;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -115,14 +116,16 @@ public class BlockBreakSpeed {
             isCorrectToolForDrop = block.getType() == StateTypes.COBWEB;
         }
 
-        speedMultiplier *= (float) player.compensatedEntities.getSelf().getBreakSpeedMultiplier();
-
         if (speedMultiplier > 1.0f) {
+            speedMultiplier += (float) player.compensatedEntities.getSelf().getAttributeValue(Attributes.PLAYER_MINING_EFFICIENCY);
+
             int digSpeed = tool.getEnchantmentLevel(EnchantmentTypes.BLOCK_EFFICIENCY, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
             if (digSpeed > 0) {
                 speedMultiplier += digSpeed * digSpeed + 1;
             }
         }
+
+        speedMultiplier *= (float) player.compensatedEntities.getSelf().getAttributeValue(Attributes.PLAYER_BLOCK_BREAK_SPEED);
 
         Integer digSpeed = player.compensatedEntities.getPotionLevelForPlayer(PotionTypes.HASTE);
         Integer conduit = player.compensatedEntities.getPotionLevelForPlayer(PotionTypes.CONDUIT_POWER);
