@@ -12,11 +12,12 @@ public class Riptide {
         ItemStack main = player.getInventory().getHeldItem();
         ItemStack off = player.getInventory().getOffHand();
 
+        //Xiamo: use IMPALING instead of RIPTIDE because packetevents
         int j;
         if (main.getType() == ItemTypes.TRIDENT) {
-            j = main.getEnchantmentLevel(EnchantmentTypes.RIPTIDE, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
+            j = main.getEnchantmentLevel(EnchantmentTypes.IMPALING, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
         } else if (off.getType() == ItemTypes.TRIDENT) {
-            j = off.getEnchantmentLevel(EnchantmentTypes.RIPTIDE, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
+            j = off.getEnchantmentLevel(EnchantmentTypes.IMPALING, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion());
         } else {
             return new Vector(); // Can't riptide
         }

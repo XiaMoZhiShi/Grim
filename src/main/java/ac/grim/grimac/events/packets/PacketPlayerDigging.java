@@ -11,6 +11,8 @@ import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.FoodProperties;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
+import com.github.retrooper.packetevents.protocol.item.enchantment.Enchantment;
+import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentType;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -22,6 +24,8 @@ import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.player.InteractionHand;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.wrapper.play.client.*;
+
+import java.util.List;
 
 public class PacketPlayerDigging extends PacketListenerAbstract {
 
@@ -102,8 +106,9 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         }
 
         // The client and server don't agree on trident status because mojang is incompetent at netcode.
+        //Xiamo: use IMPALING instead of RIPTIDE because packetevents
         if (material == ItemTypes.TRIDENT) {
-            player.packetStateData.slowedByUsingItem = item.getEnchantmentLevel(EnchantmentTypes.RIPTIDE, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) <= 0;
+            player.packetStateData.slowedByUsingItem = item.getEnchantmentLevel(EnchantmentTypes.IMPALING, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) <= 0;
             player.packetStateData.eatingHand = hand;
         }
 
@@ -157,8 +162,9 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
                 if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
                     ItemStack hand = player.packetStateData.eatingHand == InteractionHand.OFF_HAND ? player.getInventory().getOffHand() : player.getInventory().getHeldItem();
 
+                    //Xiamo: use IMPALING instead of RIPTIDE because packetevents
                     if (hand.getType() == ItemTypes.TRIDENT
-                            && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) > 0) {
+                            && hand.getEnchantmentLevel(EnchantmentTypes.IMPALING, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) > 0) {
                         player.packetStateData.tryingToRiptide = true;
                     }
                 }
