@@ -8,12 +8,14 @@ import ac.grim.grimac.utils.collisions.datatypes.CollisionBox;
 import ac.grim.grimac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.grim.grimac.utils.data.Pair;
 import ac.grim.grimac.utils.data.VectorData;
+import ac.grim.grimac.utils.data.tags.SyncedTags;
 import ac.grim.grimac.utils.latency.CompensatedWorld;
 import ac.grim.grimac.utils.math.GrimMath;
 import ac.grim.grimac.utils.math.VectorUtils;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.chunk.BaseChunk;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
@@ -449,7 +451,11 @@ public class Collisions {
                     StateType blockType = block.getType();
 
                     if (blockType == StateTypes.COBWEB) {
-                        player.stuckSpeedMultiplier = new Vector(0.25, 0.05000000074505806, 0.25);
+                        if (player.compensatedEntities.hasPotionEffect(PotionTypes.WEAVING)) {
+                            player.stuckSpeedMultiplier = new Vector(0.5, 0.25, 0.5);
+                        } else {
+                            player.stuckSpeedMultiplier = new Vector(0.25, 0.05000000074505806, 0.25);
+                        }
                     }
 
                     if (blockType == StateTypes.SWEET_BERRY_BUSH
@@ -713,7 +719,7 @@ public class Collisions {
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17);
         }
 
-        if (BlockTags.CLIMBABLE.contains(blockMaterial)) {
+        if (player.tagManager.block(SyncedTags.CLIMBABLE).contains(blockMaterial)) {
             return true;
         }
 
