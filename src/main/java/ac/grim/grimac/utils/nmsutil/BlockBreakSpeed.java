@@ -2,6 +2,7 @@ package ac.grim.grimac.utils.nmsutil;
 
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.enums.FluidTag;
+import ac.grim.grimac.utils.inventory.EnchantmentHelper;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
